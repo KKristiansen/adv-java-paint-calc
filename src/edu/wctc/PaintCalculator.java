@@ -1,5 +1,7 @@
 package edu.wctc;
 
+import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,7 +11,8 @@ public class PaintCalculator {
     private ArrayList<Room> roomList = new ArrayList<>();
     private Scanner keyboard;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         new PaintCalculator();
     }
 
@@ -29,10 +32,30 @@ public class PaintCalculator {
                         createRoom();
                         break;
                     case 2:
-                        // writeFile();
+                        // writeFile(); -Added by Kris
+                        RoomWriter rw  = new RoomWriter();
+                        try {
+                            rw.writeRoomFile("room.dat", roomList);
+                            System.out.println("Rooms saved to file.");
+                        } catch (IOException e) {
+                            System.out.println("IO Exception Error:");
+                            System.out.println(e.getMessage());
+                        }
                         break;
                     case 3:
-                        // readFile();
+                        // readFile() -Added by Kris;
+                        RoomReader rr = new RoomReader();
+                        try {
+                            roomList = rr.readRoomFile("room.dat");
+                            Room.setRoomCount(rr.getRoomsRead());
+                            System.out.println(rr.getRoomsRead() + " room(s) read from file.");
+                        } catch (IOException e) {
+                            System.out.println("IO Exception Error:");
+                            System.out.println(e.getMessage());
+                        } catch (ClassNotFoundException e) {
+                            System.out.println("Class Not Found Exception Error:");
+                            System.out.println(e.getMessage());
+                        }
                         break;
                     case 4:
                         printRooms();
