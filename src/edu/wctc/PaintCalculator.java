@@ -1,14 +1,14 @@
 package edu.wctc;
 
-import java.io.IOError;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class PaintCalculator {
 
-    private ArrayList<Room> roomList = new ArrayList<>();
+    private ArrayList<Paintable> paintableList = new ArrayList<>();
+    private Garage garage;
     private Scanner keyboard;
 
     public static void main(String[] args)
@@ -35,7 +35,7 @@ public class PaintCalculator {
                         // writeFile(); -Added by Kris
                         RoomWriter rw  = new RoomWriter();
                         try {
-                            rw.writeRoomFile("room.dat", roomList);
+                            rw.writeRoomFile("room.dat", paintableList);
                             System.out.println("Rooms saved to file.");
                         } catch (IOException e) {
                             System.out.println("IO Exception Error:");
@@ -46,7 +46,12 @@ public class PaintCalculator {
                         // readFile() -Added by Kris;
                         RoomReader rr = new RoomReader();
                         try {
-                            roomList = rr.readRoomFile("room.dat");
+                            paintableList = rr.readRoomFile("room.dat");
+                            //Check for garage
+                            for (Paintable p : paintableList) {
+                                 if (p.getClass().getName() == "edu.wctc.Garage")
+                                    garage = (Garage)p;
+                            }
                             Room.setRoomCount(rr.getRoomsRead());
                             System.out.println(rr.getRoomsRead() + " room(s) read from file.");
                         } catch (IOException e) {
@@ -61,6 +66,16 @@ public class PaintCalculator {
                         printRooms();
                         break;
                     case 5:
+                        if (garage == null) {
+                            System.out.print("No garage yet. Add? (Enter Y to Add): ");
+                            s = keyboard.nextLine();
+                            if (s.equalsIgnoreCase("y")) {
+                                garage = new Garage();
+                                paintableList.add(garage);
+                            }
+                        } else System.out.println(garage.toString());
+                        break;
+                    case 6:
                         System.out.println("Goodbye");
                         System.exit(0);
                 }
@@ -72,11 +87,11 @@ public class PaintCalculator {
     }
 
     private void printRooms() {
-        if (roomList.isEmpty()) {
+        if (paintableList.isEmpty()) {
             System.out.println("No rooms yet");
         }
 
-        for (Room room : roomList) {
+        for (Paintable room : paintableList) {
             System.out.println(room.toString());
         }
     }
@@ -87,7 +102,8 @@ public class PaintCalculator {
         System.out.println("2. Write rooms to file");
         System.out.println("3. Read rooms from file");
         System.out.println("4. View rooms");
-        System.out.println("5. Exit");
+        System.out.println("5. Garage");
+        System.out.println("6. Exit");
         System.out.println();
     }
 
@@ -108,12 +124,11 @@ public class PaintCalculator {
 
         try {
             Room room = new Room(length, width, height);
-            roomList.add(room);
+            paintableList.add(room);
 
             System.out.println("Room successfully created");
         } catch (BadWidthException | BadHeightException e) {
             System.out.println("Could not create room.");
         }
-
     }
 }

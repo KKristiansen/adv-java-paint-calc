@@ -9,15 +9,15 @@ import java.util.ArrayList;
 public class RoomReader {
     int roomsRead;
 
-    public ArrayList<Room> readRoomFile(String fileName) throws IOException, ClassNotFoundException {
-        ArrayList<Room> roomList = new ArrayList<>();
+    public ArrayList<Paintable> readRoomFile(String fileName) throws IOException, ClassNotFoundException {
+        ArrayList<Paintable> roomList = new ArrayList<>();
         FileInputStream fis = new FileInputStream(fileName);
         ObjectInputStream ois = new ObjectInputStream(fis);
         Object obj;
         roomsRead = 0;
         try {
             while ((obj = ois.readObject()) != null) {
-                roomList.add((Room) obj);
+                roomList.add((Paintable) obj);
                 roomsRead++;
             }
         } catch (IOException e) {

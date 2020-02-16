@@ -6,10 +6,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class RoomWriter {
-    public void writeRoomFile(String fileName, ArrayList<Room> roomList) throws IOException {
+    public void writeRoomFile(String fileName, ArrayList<Paintable> paintableList) throws IOException {
         FileOutputStream fos = new FileOutputStream(fileName);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
-        for (Room r : roomList) {
+        for (Paintable r : paintableList) {
             oos.writeObject(r);
         }
         oos.close();
